@@ -1,17 +1,53 @@
-const { kitties } = require('./datasets/kitties');
-const { clubs } = require('./datasets/clubs');
-const { mods } = require('./datasets/mods');
-const { cakes } = require('./datasets/cakes');
-const { classrooms } = require('./datasets/classrooms');
-const { breweries } = require('./datasets/breweries');
-const { nationalParks } = require('./datasets/nationalParks');
-const { books } = require('./datasets/books');
-const { weather } = require('./datasets/weather');
-const { instructors, cohorts } = require('./datasets/turing');
-const { bosses, sidekicks } = require('./datasets/bosses');
-const { constellations, stars } = require('./datasets/astronomy');
-const { weapons, characters } = require('./datasets/ultima');
-const { dinosaurs, humans, movies } = require('./datasets/dinosaurs');
+/* eslint-disable */
+
+const {
+  kitties
+} = require('./datasets/kitties');
+const {
+  clubs
+} = require('./datasets/clubs');
+const {
+  mods
+} = require('./datasets/mods');
+const {
+  cakes
+} = require('./datasets/cakes');
+const {
+  classrooms
+} = require('./datasets/classrooms');
+const {
+  breweries
+} = require('./datasets/breweries');
+const {
+  nationalParks
+} = require('./datasets/nationalParks');
+const {
+  books
+} = require('./datasets/books');
+const {
+  weather
+} = require('./datasets/weather');
+const {
+  instructors,
+  cohorts
+} = require('./datasets/turing');
+const {
+  bosses,
+  sidekicks
+} = require('./datasets/bosses');
+const {
+  constellations,
+  stars
+} = require('./datasets/astronomy');
+const {
+  weapons,
+  characters
+} = require('./datasets/ultima');
+const {
+  dinosaurs,
+  humans,
+  movies
+} = require('./datasets/dinosaurs');
 
 
 
@@ -27,7 +63,12 @@ const kittyPrompts = {
 
     // Return an array of just the names of kitties who are orange e.g.
     // ['Tiger', 'Snickers']
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.filter(cat => {
+      return cat.color === "orange"
+    }).map(orangeCat => {
+      return orangeCat.name
+    });
+
     return result;
 
     // Annotation:
@@ -37,7 +78,7 @@ const kittyPrompts = {
   sortByAge() {
     // Sort the kitties by their age
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.sort((a, b) => b.age - a.age);
     return result;
 
     // Annotation:
@@ -58,7 +99,15 @@ const kittyPrompts = {
     // },
     // ...etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.map(cat => {
+
+      return {
+        name: cat.name,
+        age: cat.age + 2,
+        color: cat.color
+      }
+
+    }).sort((a, b) => b.age - a.age);
     return result;
   }
 };
@@ -90,7 +139,19 @@ const clubPrompts = {
     //   ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = clubs.reduce((acc, club) => {
+
+      club.members.forEach(member => {
+
+        if (!acc[member]) {
+          acc[member] = []
+        }
+
+        acc[member].push(club.club);
+      })
+
+      return acc
+    }, {});
     return result;
 
     // Annotation:
@@ -126,7 +187,11 @@ const modPrompts = {
     //   { mod: 4, studentsPerInstructor: 8 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = mods.map(singleMod => {
+
+    return {mod: singleMod.mod,
+            studentsPerInstructor: singleMod.students/singleMod.instructors}
+  });
     return result;
 
     // Annotation:
@@ -161,7 +226,14 @@ const cakePrompts = {
     //    ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.map(element => {
+
+      return {
+        flavor: element.cakeFlavor,
+        inStock: element.inStock
+      }
+
+    });
     return result;
 
     // Annotation:
@@ -189,7 +261,11 @@ const cakePrompts = {
     // ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.filter(cake => {
+
+      return cake.inStock > 0;
+
+    });
     return result;
 
     // Annotation:
@@ -200,7 +276,12 @@ const cakePrompts = {
     // Return the total amount of cakes in stock e.g.
     // 59
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((totalStock, cake) => {
+
+      totalStock += cake.inStock
+
+      return totalStock
+    }, 0);
     return result;
 
     // Annotation:
@@ -212,7 +293,20 @@ const cakePrompts = {
     // every cake in the dataset e.g.
     // ['dutch process cocoa', 'toasted sugar', 'smoked sea salt', 'berries', ..etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((allToppings, cake) => {
+
+      cake.toppings.forEach(topping => {
+
+        if (!allToppings.includes(topping)) {
+          allToppings.push(topping)
+        }
+
+      })
+
+
+
+      return allToppings
+    }, []);
     return result;
 
     // Annotation:
@@ -230,7 +324,20 @@ const cakePrompts = {
     //    ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((groceryList, cake) => {
+
+      cake.toppings.forEach(topping => {
+
+        if (!groceryList[topping]) {
+          groceryList[topping] = 1;
+        } else {
+          groceryList[topping] += 1
+        }
+
+      })
+
+      return groceryList
+    }, {});
     return result;
 
     // Annotation:
@@ -265,7 +372,7 @@ const classPrompts = {
     //   { roomLetter: 'G', program: 'FE', capacity: 29 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.filter(classroom => classroom.program === "FE");
     return result;
 
     // Annotation:
@@ -280,7 +387,19 @@ const classPrompts = {
     //   beCapacity: 96
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.reduce((totalCapacity, classroom) => {
+
+      if (classroom.program === "FE") {
+        totalCapacity.feCapacity += classroom.capacity
+      } else if (classroom.program === "BE") {
+        totalCapacity.beCapacity += classroom.capacity
+      }
+      return totalCapacity
+    }, {
+      feCapacity: 0,
+      beCapacity: 0
+    });
+
     return result;
 
     // Annotation:
@@ -290,7 +409,9 @@ const classPrompts = {
   sortByCapacity() {
     // Return the array of classrooms sorted by their capacity (least capacity to greatest)
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.sort((a, b) => {
+      return a.capacity - b.capacity
+    });;
     return result;
 
     // Annotation:
@@ -317,7 +438,8 @@ const bookPrompts = {
     //   'Catch-22', 'Treasure Island']
 
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = books.filter(book => book.genre !== "Horror" &&
+      book.genre !== "True Crime").map(element => element.title);
     return result;
 
     // Annotation:
@@ -332,7 +454,20 @@ const bookPrompts = {
     //  { title: 'Life of Pi', year: 2001 },
     //  { title: 'The Curious Incident of the Dog in the Night-Time', year: 2003 }]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = books.filter(book => {
+
+      return book.published >= 1990;
+
+
+    }).map(element => {
+
+      return {
+        title: element.title,
+        year: element.published
+      }
+
+    });
+
     return result;
 
     // Annotation:
@@ -355,7 +490,14 @@ const weatherPrompts = {
     // return an array of all the average temperatures. Eg:
     // [ 40, 40, 44.5, 43.5, 57, 35, 65.5, 62, 14, 46.5 ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = weather.reduce((avgTemps, city) => {
+
+
+    avgTemps.push((city.temperature.high + city.temperature.low)/2)
+
+
+    return avgTemps
+  },[]);
     return result;
 
     // Annotation:
@@ -369,7 +511,12 @@ const weatherPrompts = {
     // 'New Orleans, Louisiana is sunny.',
     // 'Raleigh, North Carolina is mostly sunny.' ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = weather.reduce((sunnyPlaces, city) => {
+
+    city.type.includes("sunny") ? sunnyPlaces.push(`${city.location} is ${city.type}.`) : null
+
+  return sunnyPlaces
+  },[]);
     return result;
 
     // Annotation:
@@ -385,7 +532,7 @@ const weatherPrompts = {
     //   temperature: { high: 49, low: 38 }
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = weather.sort((a,b) => b.humidity - a.humidity)[0];
     return result;
 
     // Annotation:
@@ -805,7 +952,17 @@ const dinosaurPrompts = {
     //   'Jurassic World: Fallen Kingdom': 18
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = movies.reduce((acc, movie) => {
+      let total = 0
+      movie.dinos.forEach(dino => {
+        if (dinosaurs[dino].isAwesome === true) {
+          total++
+        }
+      })
+      acc[movie.title] = total
+      return acc
+    }, {})
+
     return result;
 
     // Annotation:
